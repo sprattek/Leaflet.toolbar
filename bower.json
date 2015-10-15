@@ -1,0 +1,16 @@
+{
+  "name": "Leaflet-toolbar-waysay",
+  "description": "Forked from Leaflet.toolbar",
+  "author": "Leaflet, forked by Bob Ullery",
+  "version": "1.0.1",
+  "license": "MIT",
+  "main": "dist/leaflet.toolbar.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waysay/Leaflet.toolbar"
+  },
+  "devDependencies": {
+	"leaflet": "~0.7.0",
+	    "leaflet-draw": "manleyjster/Leaflet.draw#leaflet-toolbar-plugin"
+  }
+}
