@@ -1,7 +1,7 @@
 {
   "name": "Leaflet-toolbar-waysay",
   "description": "Forked from Leaflet.toolbar",
-  "author": "Leaflet, forked by Bob Ullery",
+  "author": "Leaflet, forked by Bob Ullery.",
   "version": "1.0.3",
   "license": "MIT",
   "main": "dist/leaflet.toolbar.js",
