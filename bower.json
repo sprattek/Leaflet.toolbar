@@ -2,7 +2,7 @@
   "name": "Leaflet-toolbar-tattek",
   "description": "Forked from Leaflet.toolbar",
   "author": "forked by tattek.",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "license": "MIT",
   "main": [
 	  "dist/leaflet.toolbar.js",
