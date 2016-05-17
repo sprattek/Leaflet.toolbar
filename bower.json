@@ -1,8 +1,8 @@
 {
-  "name": "Leaflet-toolbar-waysay",
+  "name": "Leaflet-toolbar-tattek",
   "description": "Forked from Leaflet.toolbar",
-  "author": "Leaflet, forked by Bob Ullery.",
-  "version": "1.0.6",
+  "author": "forked by tattek.",
+  "version": "1.0.0",
   "license": "MIT",
   "main": [
 	  "dist/leaflet.toolbar.js",
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/waysay/Leaflet.toolbar"
+    "url": "https://github.com/sprattek/Leaflet.toolbar"
   },
   "devDependencies": {
 	"leaflet": "~0.7.0",
