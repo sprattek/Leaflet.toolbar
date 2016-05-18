@@ -1,7 +1,7 @@
-var parts = window.URL.split('/');
+var parts = document.URL.split('/');
 //console.log(parts[parts.length - 1]);
 
-if (parts[parts.length - 1] === 'geofences') {
+if (parts[parts.length - 1] === 'floors') {
 	L.Toolbar = (L.Layer || L.Class).extend({
 		statics: {
 			baseClass: 'leaflet-toolbar'

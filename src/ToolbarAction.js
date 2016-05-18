@@ -1,94 +1,110 @@
-L.ToolbarAction = L.Handler.extend({
-	statics: {
-		baseClass: 'leaflet-toolbar-icon'
-	},
-
-	options: {
-		toolbarIcon: {
-			html: '',
-			className: '',
-			tooltip: ''
+if (parts[parts.length - 1] === 'floors') {
+	L.ToolbarAction = L.Handler.extend({
+		statics: {
+			baseClass: 'leaflet-toolbar-icon'
 		},
-		subToolbar: new L.Toolbar()
-	},
 
-	initialize: function(options) {
-		var defaultIconOptions = L.ToolbarAction.prototype.options.toolbarIcon;
+		options: {
+			toolbarIcon: {
+				html: '',
+				className: '',
+				tooltip: ''
+			},
+			subToolbar: new L.Toolbar()
+		},
 
-		L.setOptions(this, options);
-		this.options.toolbarIcon = L.extend({}, defaultIconOptions, this.options.toolbarIcon);
-	},
+		initialize: function (options) {
+			var defaultIconOptions = L.ToolbarAction.prototype.options.toolbarIcon;
 
-	enable: function(e) {
-		if (e) { L.DomEvent.preventDefault(e); }
-		if (this._enabled) { return; }
-		this._enabled = true;
+			L.setOptions(this, options);
+			this.options.toolbarIcon = L.extend({}, defaultIconOptions, this.options.toolbarIcon);
+		},
 
-		if (this.addHooks) { this.addHooks(); }
-	},
+		enable: function (e) {
+			if (e) {
+				L.DomEvent.preventDefault(e);
+			}
+			if (this._enabled) {
+				return;
+			}
+			this._enabled = true;
 
-	disable: function() {
-		if (!this._enabled) { return; }
-		this._enabled = false;
+			if (this.addHooks) {
+				this.addHooks();
+			}
+		},
 
-		if (this.removeHooks) { this.removeHooks(); }
-	},
+		disable: function () {
+			if (!this._enabled) {
+				return;
+			}
+			this._enabled = false;
 
-	_createIcon: function(toolbar, container, args) {
-		var iconOptions = this.options.toolbarIcon;
+			if (this.removeHooks) {
+				this.removeHooks();
+			}
+		},
 
-		this.toolbar = toolbar;
-		this._icon = L.DomUtil.create('li', '', container);
-		this._link = L.DomUtil.create('a', '', this._icon);
+		_createIcon: function (toolbar, container, args) {
+			var iconOptions = this.options.toolbarIcon;
 
-		this._link.innerHTML = iconOptions.html;
-		this._link.setAttribute('href', 'javascript:;');
-		this._link.setAttribute('title', iconOptions.tooltip);
+			this.toolbar = toolbar;
+			this._icon = L.DomUtil.create('li', '', container);
+			this._link = L.DomUtil.create('a', '', this._icon);
 
-		L.DomUtil.addClass(this._link, this.constructor.baseClass);
-		if (iconOptions.className) {
-			L.DomUtil.addClass(this._link, iconOptions.className);
+			this._link.innerHTML = iconOptions.html;
+			this._link.setAttribute('href', 'javascript:;');
+			this._link.setAttribute('title', iconOptions.tooltip);
+
+			L.DomUtil.addClass(this._link, this.constructor.baseClass);
+			if (iconOptions.className) {
+				L.DomUtil.addClass(this._link, iconOptions.className);
+			}
+
+			L.DomEvent.on(this._link, 'click', this.enable, this);
+
+			/* Add secondary toolbar */
+			this._addSubToolbar(toolbar, this._icon, args);
+		},
+
+		_addSubToolbar: function (toolbar, container, args) {
+			var subToolbar = this.options.subToolbar,
+					addHooks = this.addHooks,
+					removeHooks = this.removeHooks;
+
+			/* For calculating the nesting depth. */
+			subToolbar.parentToolbar = toolbar;
+
+			if (subToolbar.options.actions.length > 0) {
+				/* Make a copy of args so as not to pollute the args array used by other actions. */
+				args = [].slice.call(args);
+				args.push(this);
+
+				subToolbar.addTo.apply(subToolbar, args);
+				subToolbar.appendToContainer(container);
+
+				this.addHooks = function (map) {
+					if (typeof addHooks === 'function') {
+						addHooks.call(this, map);
+					}
+					subToolbar._show();
+				};
+
+				this.removeHooks = function (map) {
+					if (typeof removeHooks === 'function') {
+						removeHooks.call(this, map);
+					}
+					subToolbar._hide();
+				};
+			}
 		}
+	});
 
-		L.DomEvent.on(this._link, 'click', this.enable, this);
+	L.toolbarAction = function toolbarAction(options) {
+		return new L.ToolbarAction(options);
+	};
 
-		/* Add secondary toolbar */
-		this._addSubToolbar(toolbar, this._icon, args);
-	},
-
-	_addSubToolbar: function(toolbar, container, args) {
-		var subToolbar = this.options.subToolbar,
-			addHooks = this.addHooks,
-			removeHooks = this.removeHooks;
-
-		/* For calculating the nesting depth. */
-		subToolbar.parentToolbar = toolbar;
-
-		if (subToolbar.options.actions.length > 0) {
-			/* Make a copy of args so as not to pollute the args array used by other actions. */
-			args = [].slice.call(args);
-			args.push(this);
-
-			subToolbar.addTo.apply(subToolbar, args);
-			subToolbar.appendToContainer(container);
-
-			this.addHooks = function(map) {
-				if (typeof addHooks === 'function') { addHooks.call(this, map); }
-				subToolbar._show();
-			};
-
-			this.removeHooks = function(map) {
-				if (typeof removeHooks === 'function') { removeHooks.call(this, map); }
-				subToolbar._hide();
-			};
-		}
-	}
-});
-
-L.toolbarAction = function toolbarAction(options) {
-	return new L.ToolbarAction(options);
-};
-
-L.ToolbarAction.extendOptions = function(options) {
-	return this.extend({ options: options });
-};
+	L.ToolbarAction.extendOptions = function (options) {
+		return this.extend({options: options});
+	};
+}
